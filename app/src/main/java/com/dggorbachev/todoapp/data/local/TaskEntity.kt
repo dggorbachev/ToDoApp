@@ -11,17 +11,17 @@ import java.text.DateFormat
 @Entity(tableName = TABLE_NAME)
 @Parcelize
 data class TaskEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int = 0,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "postDate")
     val postDate: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "isImportant")
-    val isImportant: Boolean,
+    val isImportant: Boolean = false,
     @ColumnInfo(name = "isCompleted")
-    val isCompleted: Boolean
+    val isCompleted: Boolean = false,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int = 0
 ) : Parcelable {
     companion object {
         const val TABLE_NAME = "TASK_TABLE"
