@@ -60,7 +60,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_androidx_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_androidx_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Navigation
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
