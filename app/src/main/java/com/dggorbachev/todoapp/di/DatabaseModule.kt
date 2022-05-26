@@ -4,13 +4,13 @@ import android.app.Application
 import androidx.room.Room
 import com.dggorbachev.todoapp.AppDataBase
 import com.dggorbachev.todoapp.base.common.Constants.DATA_BASE
-import com.dggorbachev.todoapp.data.local.TasksDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -21,16 +21,12 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         app: Application,
-        @ApplicationScope callback: AppDataBase.Callback
-    ): AppDataBase {
-        return Room.databaseBuilder(app, AppDataBase::class.java, DATA_BASE)
-            .fallbackToDestructiveMigration()
-            .addCallback(callback)
-            .build()
-    }
+        callback: AppDataBase.Callback
+    ) = Room.databaseBuilder(app, AppDataBase::class.java, DATA_BASE)
+        .fallbackToDestructiveMigration()
+        .addCallback(callback)
+        .build()
 
     @Provides
-    fun provideTasksDAO(db: AppDataBase): TasksDAO {
-        return db.tasksDAO()
-    }
+    fun provideTaskDao(db: AppDataBase) = db.tasksDAO()
 }
