@@ -1,10 +1,12 @@
 package com.dggorbachev.todoapp
 
+import android.app.Application
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.dggorbachev.todoapp.data.local.TasksDAO
 import com.dggorbachev.todoapp.data.local.TaskEntity
+import com.dggorbachev.todoapp.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,7 +19,7 @@ abstract class AppDataBase : RoomDatabase() {
 
     class Callback @Inject constructor(
         private val database: Provider<AppDataBase>,
-        private val applicationScope: CoroutineScope
+        @ApplicationScope private val applicationScope: CoroutineScope
     ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
