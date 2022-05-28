@@ -5,4 +5,10 @@
     <string name="save_task">Save task</string>
     <string name="enter_task">Enter task..</string>
     <string name="important_task">Mark task as important</string>
+    <string name="search">Search</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by_name">Sort by name</string>
+    <string name="sort_by_date">Sort by date</string>
+    <string name="hide_completed">Hide completed</string>
+    <string name="delete_completed">Delete completed</string>
 </resources>
