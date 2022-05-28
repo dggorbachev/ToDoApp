@@ -8,11 +8,12 @@ import com.dggorbachev.todoapp.data.local.TasksDAO
 import com.dggorbachev.todoapp.data.local.TaskEntity
 import com.dggorbachev.todoapp.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [TaskEntity::class], version = 1)
+@Database(entities = [TaskEntity::class], version = 3)
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun tasksDAO(): TasksDAO

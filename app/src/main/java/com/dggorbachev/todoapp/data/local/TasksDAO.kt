@@ -9,8 +9,8 @@ interface TasksDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(taskEntity: TaskEntity)
 
-    @Query("SELECT * FROM task_table")
-    fun read(): Flow<List<TaskEntity>>
+    @Query("SELECT * FROM task_table WHERE name LIKE '%' || :searchQuery || '%' ORDER BY isImportant DESC")
+    fun read(searchQuery: String): Flow<List<TaskEntity>>
 
     @Update
     suspend fun update(taskEntity: TaskEntity)
