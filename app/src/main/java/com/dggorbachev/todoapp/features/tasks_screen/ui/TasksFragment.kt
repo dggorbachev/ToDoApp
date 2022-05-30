@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dggorbachev.todoapp.R
 import com.dggorbachev.todoapp.base.util.OnQueryTextChanged
 import com.dggorbachev.todoapp.data.SortOrder
+import com.dggorbachev.todoapp.data.local.TaskEntity
 import com.dggorbachev.todoapp.databinding.FragmentTasksBinding
 import com.dggorbachev.todoapp.features.tasks_screen.ui.adapter.TasksAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks) {
+class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClickListener {
 
     private val viewModel: TasksViewModel by viewModels()
     private var _binding: FragmentTasksBinding? = null
@@ -43,7 +44,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tasksAdapter = TasksAdapter()
+        val tasksAdapter = TasksAdapter(this)
 
         binding.rvTasks.apply {
             adapter = tasksAdapter
@@ -97,5 +98,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                 }
             }, viewLifecycleOwner, Lifecycle.State.RESUMED
         )
+    }
+
+    override fun onTaskClick(taskEntity: TaskEntity) {
+        viewModel.onTaskClicked(taskEntity)
+    }
+
+    override fun onCheckBoxClick(taskEntity: TaskEntity, isChecked: Boolean) {
+        viewModel.onTaskCompletedChanged(taskEntity, isChecked)
     }
 }
