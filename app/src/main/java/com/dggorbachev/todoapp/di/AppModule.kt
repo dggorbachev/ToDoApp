@@ -1,11 +1,14 @@
 package com.dggorbachev.todoapp.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.dggorbachev.todoapp.AppDataBase
+import com.dggorbachev.todoapp.base.common.Constants.DATA_BASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,10 +19,11 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDatabase(
-        app: Application
-    ) = Room.databaseBuilder(app, AppDataBase::class.java, "task_database")
-        .createFromAsset("init_db.db")
-        .build()
+        @ApplicationContext appContext: Context
+    ): AppDataBase =
+        Room.databaseBuilder(appContext, AppDataBase::class.java, DATA_BASE)
+            .createFromAsset("init_db.db")
+            .build()
 
     @Provides
     fun provideTaskDao(db: AppDataBase) = db.tasksDAO()
