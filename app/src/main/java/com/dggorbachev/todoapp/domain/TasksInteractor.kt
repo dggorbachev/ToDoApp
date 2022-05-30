@@ -2,9 +2,9 @@ package com.dggorbachev.todoapp.domain
 
 import androidx.lifecycle.LiveData
 import com.dggorbachev.todoapp.base.attempt
+import com.dggorbachev.todoapp.data.SortOrder
 import com.dggorbachev.todoapp.data.TasksRepo
 import com.dggorbachev.todoapp.data.local.TaskEntity
-import com.dggorbachev.todoapp.features.tasks_screen.ui.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 class TasksInteractor(private val repo: TasksRepo) {
