@@ -1,6 +1,10 @@
 package com.dggorbachev.todoapp.base.util
 
+import android.content.Context
 import androidx.appcompat.widget.SearchView
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 
 inline fun SearchView.OnQueryTextChanged(crossinline listener: (String) -> Unit) {
     this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -14,3 +18,5 @@ inline fun SearchView.OnQueryTextChanged(crossinline listener: (String) -> Unit)
         }
     })
 }
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")

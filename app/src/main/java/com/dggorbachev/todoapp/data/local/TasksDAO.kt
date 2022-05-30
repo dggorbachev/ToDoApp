@@ -1,7 +1,7 @@
 package com.dggorbachev.todoapp.data.local
 
 import androidx.room.*
-import com.dggorbachev.todoapp.features.tasks_screen.ui.SortOrder
+import com.dggorbachev.todoapp.data.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 @Dao

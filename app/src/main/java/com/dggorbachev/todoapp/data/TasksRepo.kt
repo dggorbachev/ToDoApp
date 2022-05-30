@@ -4,7 +4,6 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Update
 import com.dggorbachev.todoapp.data.local.TaskEntity
-import com.dggorbachev.todoapp.features.tasks_screen.ui.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 interface TasksRepo {
