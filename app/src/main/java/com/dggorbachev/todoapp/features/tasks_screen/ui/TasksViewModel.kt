@@ -34,6 +34,8 @@ class TasksViewModel @Inject constructor(
         tasksInteractor.read(query, filterPreferences.sortOrder, filterPreferences.hideCompleted)
     }
 
+    val tasks = tasksFlow.asLiveData()
+
     fun onSortOrderSelected(sortOrder: SortOrder) =
         viewModelScope.launch {
             preferencesManager.updateSortOrder(sortOrder)
@@ -44,5 +46,12 @@ class TasksViewModel @Inject constructor(
             preferencesManager.updateHideCompleted(hideCompleted)
         }
 
-    val tasks = tasksFlow.asLiveData()
+    fun onTaskClicked(taskEntity: TaskEntity) {
+        TODO("Add functional")
+    }
+
+    fun onTaskCompletedChanged(taskEntity: TaskEntity, isCompleted: Boolean) =
+        viewModelScope.launch {
+            tasksInteractor.update(taskEntity.copy(isCompleted = isCompleted))
+        }
 }

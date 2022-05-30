@@ -10,11 +10,33 @@ import com.dggorbachev.todoapp.data.local.TaskEntity
 import com.dggorbachev.todoapp.databinding.ItemTaskBinding
 
 
-class TasksAdapter : ListAdapter<TaskEntity, TasksAdapter.ViewHolder>(DiffCallback()) {
-    class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+class TasksAdapter(private val listener: OnTaskClickListener) :
+    ListAdapter<TaskEntity, TasksAdapter.ViewHolder>(DiffCallback()) {
+    inner class ViewHolder(private val binding: ItemTaskBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            with(binding) {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onTaskClick(task)
+                    }
+
+                }
+                cbCompleted.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onCheckBoxClick(task, cbCompleted.isChecked)
+                    }
+                }
+            }
+        }
 
         fun bind(taskEntity: TaskEntity) {
-            binding.apply {
+            with(binding) {
                 tvTaskName.text = taskEntity.name
                 cbCompleted.isChecked = taskEntity.isCompleted
                 tvTaskName.paint.isStrikeThruText = taskEntity.isCompleted
@@ -31,6 +53,11 @@ class TasksAdapter : ListAdapter<TaskEntity, TasksAdapter.ViewHolder>(DiffCallba
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val curItem = getItem(position)
         holder.bind(curItem)
+    }
+
+    interface OnTaskClickListener {
+        fun onTaskClick(taskEntity: TaskEntity)
+        fun onCheckBoxClick(taskEntity: TaskEntity, isChecked: Boolean)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<TaskEntity>() {
