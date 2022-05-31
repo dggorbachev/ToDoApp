@@ -4,7 +4,7 @@
     <string name="example_task">Buy bread, eggs, frogs, cats, dogs, phone, notebook and apples</string>
     <string name="save_task">Save task</string>
     <string name="enter_task">Enter task..</string>
-    <string name="important_task">Mark task as important</string>
+    <string name="important_task">This is important</string>
     <string name="search">Search</string>
     <string name="sort">Sort</string>
     <string name="sort_by_name">Sort by name</string>

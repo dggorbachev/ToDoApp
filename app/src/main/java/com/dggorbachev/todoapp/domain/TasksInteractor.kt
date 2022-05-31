@@ -1,6 +1,6 @@
 package com.dggorbachev.todoapp.domain
 
-import com.dggorbachev.todoapp.base.attempt
+import com.dggorbachev.todoapp.base.util.attempt
 import com.dggorbachev.todoapp.features.tasks_screen.SortOrder
 import com.dggorbachev.todoapp.data.TasksRepo
 import com.dggorbachev.todoapp.data.local.TaskEntity

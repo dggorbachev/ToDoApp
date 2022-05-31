@@ -13,10 +13,10 @@ import java.text.DateFormat
 data class TaskEntity(
     @ColumnInfo(name = "name")
     val name: String,
-    @ColumnInfo(name = "postDate")
-    val postDate: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "isImportant")
     val isImportant: Boolean = false,
+    @ColumnInfo(name = "postDate")
+    val postDate: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "isCompleted")
     val isCompleted: Boolean = false,
     @PrimaryKey(autoGenerate = true)
