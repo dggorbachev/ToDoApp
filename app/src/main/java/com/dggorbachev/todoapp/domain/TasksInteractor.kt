@@ -1,8 +1,7 @@
 package com.dggorbachev.todoapp.domain
 
-import androidx.lifecycle.LiveData
 import com.dggorbachev.todoapp.base.attempt
-import com.dggorbachev.todoapp.data.SortOrder
+import com.dggorbachev.todoapp.features.tasks_screen.SortOrder
 import com.dggorbachev.todoapp.data.TasksRepo
 import com.dggorbachev.todoapp.data.local.TaskEntity
 import kotlinx.coroutines.flow.Flow

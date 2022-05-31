@@ -1,9 +1,7 @@
 package com.dggorbachev.todoapp.data
 
-import androidx.room.Delete
-import androidx.room.Query
-import androidx.room.Update
 import com.dggorbachev.todoapp.data.local.TaskEntity
+import com.dggorbachev.todoapp.features.tasks_screen.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 interface TasksRepo {

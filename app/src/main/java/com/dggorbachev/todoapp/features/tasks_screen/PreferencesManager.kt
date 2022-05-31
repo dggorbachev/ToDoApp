@@ -1,8 +1,7 @@
-package com.dggorbachev.todoapp.data
+package com.dggorbachev.todoapp.features.tasks_screen
 
 import android.content.Context
 import android.util.Log
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
@@ -25,7 +24,7 @@ class PreferencesManager @Inject constructor(@ApplicationContext private val con
     val preferencesFlow =
         context.dataStore.data.catch { ex ->
             if (ex is IOException) {
-                Log.e(TAG, "Error loagin prefs", ex)
+                Log.e(TAG, "Error loading prefs", ex)
                 emit(emptyPreferences())
             } else {
                 throw ex

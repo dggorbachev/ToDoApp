@@ -1,6 +1,5 @@
 package com.dggorbachev.todoapp.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.dggorbachev.todoapp.AppDataBase
