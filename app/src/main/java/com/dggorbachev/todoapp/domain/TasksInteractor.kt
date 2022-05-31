@@ -18,4 +18,7 @@ class TasksInteractor(private val repo: TasksRepo) {
 
     suspend fun delete(taskEntity: TaskEntity) =
         attempt { repo.delete(taskEntity = taskEntity) }
+
+    suspend fun deleteCompletedTasks() =
+        repo.deleteCompletedTasks()
 }
