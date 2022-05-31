@@ -1,8 +1,8 @@
 package com.dggorbachev.todoapp.features.tasks_screen.ui
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.dggorbachev.todoapp.base.common.Constants.ADD_TASK_RESULT_OK
+import com.dggorbachev.todoapp.base.common.Constants.EDIT_TASK_RESULT_OK
 import com.dggorbachev.todoapp.features.tasks_screen.PreferencesManager
 import com.dggorbachev.todoapp.features.tasks_screen.SortOrder
 import com.dggorbachev.todoapp.data.local.TaskEntity
@@ -13,20 +13,22 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class TasksViewModel @Inject constructor(
+    state: SavedStateHandle,
     private val tasksInteractor: TasksInteractor,
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
-    val searchQuery = MutableStateFlow("")
+    val searchQuery = state.getLiveData("searchQuery", "")
 
     val preferencesFlow = preferencesManager.preferencesFlow
 
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
-    private val tasksFlow: Flow<List<TaskEntity>> = combine(searchQuery, preferencesFlow)
+    private val tasksFlow: Flow<List<TaskEntity>> = combine(searchQuery.asFlow(), preferencesFlow)
     { query, filterPreferences ->
         Pair(query, filterPreferences)
     }.flatMapLatest { (query, filterPreferences) ->
@@ -45,9 +47,10 @@ class TasksViewModel @Inject constructor(
             preferencesManager.updateHideCompleted(hideCompleted)
         }
 
-    fun onTaskClicked(taskEntity: TaskEntity) {
-        TODO("Add functional")
-    }
+    fun onTaskClicked(taskEntity: TaskEntity) =
+        viewModelScope.launch {
+            tasksEventChannel.send(TasksEvent.NavigateToEditTaskFragment(taskEntity))
+        }
 
     fun onTaskCompletedChanged(taskEntity: TaskEntity, isCompleted: Boolean) =
         viewModelScope.launch {
@@ -60,13 +63,32 @@ class TasksViewModel @Inject constructor(
             tasksEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(taskEntity))
         }
 
-    fun onUndoDeleteClick(taskEntity: TaskEntity) {
+    fun onUndoDeleteClick(taskEntity: TaskEntity) =
         viewModelScope.launch {
             tasksInteractor.insert(taskEntity)
         }
+
+    fun onAddNewTaskClicked() =
+        viewModelScope.launch {
+            tasksEventChannel.send(TasksEvent.NavigateToNewTaskFragment)
+        }
+
+    fun onDetailsResult(result: Int) {
+        when (result) {
+            ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
+            EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
+        }
     }
 
+    private fun showTaskSavedConfirmationMessage(message: String) =
+        viewModelScope.launch {
+            tasksEventChannel.send(TasksEvent.ShowTaskSavedConfirmationMessage(message))
+        }
+
     sealed class TasksEvent {
+        object NavigateToNewTaskFragment : TasksEvent()
+        data class NavigateToEditTaskFragment(val taskEntity: TaskEntity) : TasksEvent()
         data class ShowUndoDeleteTaskMessage(val taskEntity: TaskEntity) : TasksEvent()
+        data class ShowTaskSavedConfirmationMessage(val message: String) : TasksEvent()
     }
 }

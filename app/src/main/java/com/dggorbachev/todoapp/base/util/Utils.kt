@@ -1,4 +1,4 @@
-package com.dggorbachev.todoapp.base
+package com.dggorbachev.todoapp.base.util
 
 import com.dggorbachev.todoapp.base.functional.Either
 
@@ -7,3 +7,6 @@ inline fun <reified T> attempt(func: () -> T): Either<Throwable, T> = try {
 } catch (e: Throwable) {
     Either.Left(e)
 }
+
+val <T> T.exhaustive: T
+    get() = this
