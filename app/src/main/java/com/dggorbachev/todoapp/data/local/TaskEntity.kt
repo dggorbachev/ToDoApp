@@ -28,5 +28,5 @@ data class TaskEntity(
     }
 
     val postDateFormatted: String
-        get() = DateFormat.getTimeInstance().format(postDate)
+        get() = DateFormat.getDateTimeInstance().format(postDate)
 }
