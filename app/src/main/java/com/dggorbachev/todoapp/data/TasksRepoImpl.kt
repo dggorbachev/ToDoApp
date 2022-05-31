@@ -2,6 +2,7 @@ package com.dggorbachev.todoapp.data
 
 import com.dggorbachev.todoapp.data.local.TaskEntity
 import com.dggorbachev.todoapp.data.local.TasksDAO
+import com.dggorbachev.todoapp.features.tasks_screen.SortOrder
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
