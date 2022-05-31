@@ -42,12 +42,12 @@ class TasksViewModel @Inject constructor(
             preferencesManager.updateSortOrder(sortOrder)
         }
 
-    fun onHideCompletedClicked(hideCompleted: Boolean) =
+    fun onHideCompletedClick(hideCompleted: Boolean) =
         viewModelScope.launch {
             preferencesManager.updateHideCompleted(hideCompleted)
         }
 
-    fun onTaskClicked(taskEntity: TaskEntity) =
+    fun onTaskClick(taskEntity: TaskEntity) =
         viewModelScope.launch {
             tasksEventChannel.send(TasksEvent.NavigateToEditTaskFragment(taskEntity))
         }
@@ -68,7 +68,7 @@ class TasksViewModel @Inject constructor(
             tasksInteractor.insert(taskEntity)
         }
 
-    fun onAddNewTaskClicked() =
+    fun onAddNewTaskClick() =
         viewModelScope.launch {
             tasksEventChannel.send(TasksEvent.NavigateToNewTaskFragment)
         }
@@ -85,8 +85,14 @@ class TasksViewModel @Inject constructor(
             tasksEventChannel.send(TasksEvent.ShowTaskSavedConfirmationMessage(message))
         }
 
+    fun onDeleteCompletedClick() =
+        viewModelScope.launch {
+            tasksEventChannel.send(TasksEvent.NavigateToDeleteCompletedFragment)
+        }
+
     sealed class TasksEvent {
         object NavigateToNewTaskFragment : TasksEvent()
+        object NavigateToDeleteCompletedFragment : TasksEvent()
         data class NavigateToEditTaskFragment(val taskEntity: TaskEntity) : TasksEvent()
         data class ShowUndoDeleteTaskMessage(val taskEntity: TaskEntity) : TasksEvent()
         data class ShowTaskSavedConfirmationMessage(val message: String) : TasksEvent()

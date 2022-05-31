@@ -28,4 +28,8 @@
             android:name="label"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/deleteCompletedDialogFragment"
+        android:name="com.dggorbachev.todoapp.features.delete_completed_screen.ui.DeleteCompletedDialogFragment"
+        android:label="DeleteCompletedDialogFragment" /><action android:id="@+id/action_global_deleteCompletedDialogFragment" app:destination="@id/deleteCompletedDialogFragment"/>
 </navigation>

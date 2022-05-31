@@ -9,4 +9,5 @@ interface TasksRepo {
     fun read(query: String, sortOrder: SortOrder, hideCompleted: Boolean): Flow<List<TaskEntity>>
     suspend fun update(taskEntity: TaskEntity)
     suspend fun delete(taskEntity: TaskEntity)
+    suspend fun deleteCompletedTasks()
 }

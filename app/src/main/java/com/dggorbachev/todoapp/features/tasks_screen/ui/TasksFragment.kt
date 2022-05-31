@@ -6,7 +6,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -24,7 +23,6 @@ import com.dggorbachev.todoapp.databinding.FragmentTasksBinding
 import com.dggorbachev.todoapp.features.tasks_screen.ui.adapter.TasksAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -34,6 +32,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClic
     private val viewModel: TasksViewModel by viewModels()
     private var _binding: FragmentTasksBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,11 +74,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClic
         }).attachToRecyclerView(binding.rvTasks)
 
         binding.fabAddTask.setOnClickListener {
-            viewModel.onAddNewTaskClicked()
+            viewModel.onAddNewTaskClick()
         }
 
 
-        // Show undo delete task
+        // Logic of events
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
                 when (event) {
@@ -105,6 +105,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClic
                     is TasksViewModel.TasksEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
                     }
+                    is TasksViewModel.TasksEvent.NavigateToDeleteCompletedFragment -> {
+                        val action =
+                            TasksFragmentDirections.actionGlobalDeleteCompletedDialogFragment()
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
         }
@@ -128,7 +133,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClic
                     menuInflater.inflate(R.menu.top_bar_menu, menu)
 
                     val searchItem = menu.findItem(R.id.actionSearch)
-                    val searchView = searchItem.actionView as SearchView
+                    searchView = searchItem.actionView as SearchView
+
+                    val pendingQuery = viewModel.searchQuery.value
+                    if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+                        searchItem.expandActionView()
+                        searchView.setQuery(pendingQuery, false)
+                    }
 
                     searchView.OnQueryTextChanged {
                         viewModel.searchQuery.value = it
@@ -152,10 +163,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClic
                         }
                         R.id.actionHideCompleted -> {
                             menuItem.isChecked = !menuItem.isChecked
-                            viewModel.onHideCompletedClicked(menuItem.isChecked)
+                            viewModel.onHideCompletedClick(menuItem.isChecked)
                             true
                         }
                         R.id.actionDeleteCompleted -> {
+                            viewModel.onDeleteCompletedClick()
                             true
                         }
                         else -> false
@@ -166,10 +178,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClic
     }
 
     override fun onTaskClick(taskEntity: TaskEntity) {
-        viewModel.onTaskClicked(taskEntity)
+        viewModel.onTaskClick(taskEntity)
     }
 
     override fun onCheckBoxClick(taskEntity: TaskEntity, isChecked: Boolean) {
         viewModel.onTaskCompletedChanged(taskEntity, isChecked)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchView.setOnQueryTextListener(null)
     }
 }

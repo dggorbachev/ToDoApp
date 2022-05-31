@@ -27,4 +27,8 @@ class TasksRepoImpl
     override suspend fun delete(taskEntity: TaskEntity) {
         tasksDAO.delete(taskEntity)
     }
+
+    override suspend fun deleteCompletedTasks() {
+        tasksDAO.deleteCompletedTasks()
+    }
 }
