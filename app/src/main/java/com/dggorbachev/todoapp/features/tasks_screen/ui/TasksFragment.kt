@@ -77,7 +77,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnTaskClic
             viewModel.onAddNewTaskClick()
         }
 
-//1
+        //1
         // Logic of events
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
